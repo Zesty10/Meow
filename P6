@@ -1,0 +1,29 @@
+Aim: Write a program using Kotlin to implement exception handling.
+
+A. with catch
+fun test(a: Int, b: Int): Int {
+    return try {
+        a / b
+    } catch (e: ArithmeticException) {
+        println(e)
+        println("Divide by zero not allowed")
+        0
+    }
+}
+fun main() {
+    println(test(10, 2))  
+    println(test(10, 0))  
+}
+
+
+C. with try
+fun main() {
+    try {
+        val arr = arrayOf(1, 2, 3, 4, 5)
+        println(arr[6])
+    } finally {
+        println("This block always executes")
+    }
+}
+
+
