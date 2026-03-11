@@ -1,0 +1,95 @@
+Aim: Create an application to create Image Flipper and Image Gallery. On click on the image display the information about the image.
+
+main.kt
+
+package com.example.practical16
+
+import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
+import androidx.activity.ComponentActivity
+import androidx.activity.enableEdgeToEdge
+
+class MainActivity : ComponentActivity() {
+
+    private val images = intArrayOf(
+        R.drawable.img1,
+        R.drawable.img2,
+        R.drawable.img3,
+        R.drawable.img4
+    )
+
+    private val imageInfo = arrayOf(
+        "Image 1: Nature",
+        "Image 2: Mountains",
+        "Image 3: Ocean",
+        "Image 4: City"
+    )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.layout)
+
+        val viewFlipper = findViewById<ViewFlipper>(R.id.viewFlipper)
+        val gridView = findViewById<GridView>(R.id.gridView)
+
+        // Image Flipper
+        for (img in images) {
+            val imageView = ImageView(this)
+            imageView.setImageResource(img)
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+            viewFlipper.addView(imageView)
+        }
+
+        viewFlipper.flipInterval = 2000
+        viewFlipper.startFlipping()
+
+        // Image Gallery (Adapter inside same file)
+        gridView.adapter = object : BaseAdapter() {
+            override fun getCount() = images.size
+            override fun getItem(position: Int) = images[position]
+            override fun getItemId(position: Int) = position.toLong()
+
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+                val imgView = ImageView(this@MainActivity)
+                imgView.setImageResource(images[position])
+                imgView.layoutParams = ViewGroup.LayoutParams(300, 300)
+                imgView.scaleType = ImageView.ScaleType.CENTER_CROP
+                imgView.setPadding(8, 8, 8, 8)
+                return imgView
+            }
+        }
+
+        // Click image → show info
+        gridView.setOnItemClickListener { _, _, position, _ ->
+            Toast.makeText(this, imageInfo[position], Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+
+
+Layouut file(XML)
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="10dp" />
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="2"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp" />
+</LinearLayout>
