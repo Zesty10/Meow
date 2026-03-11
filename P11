@@ -1,0 +1,175 @@
+Aim: Create an android application to demonstrate shared preferences.
+
+main kt
+
+package com.example.practical11
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.practical11.ui.theme.Practical11Theme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+
+        val sharedPref = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+
+        setContent {
+
+            var savedName by remember { mutableStateOf("") }
+            var savedClass by remember { mutableStateOf("") }
+
+            Practical11Theme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
+                    Column(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .padding(20.dp)
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.Top
+                    ) {
+
+                        var inputName by remember { mutableStateOf("") }
+                        var inputClass by remember { mutableStateOf("") }
+
+                        // Input Field 1 : Name
+                        OutlinedTextField(
+                            value = inputName,
+                            onValueChange = { inputName = it },
+                            label = { Text("Enter Name") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        // Input Field 2 : Class
+                        OutlinedTextField(
+                            value = inputClass,
+                            onValueChange = { inputClass = it },
+                            label = { Text("Enter Class") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        // SET Button
+                        Button(
+                            onClick = {
+                                sharedPref.edit()
+                                    .putString("username", inputName)
+                                    .putString("userclass", inputClass)
+                                    .apply()
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("SET (Save Values)")
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        // GET Button
+                        Button(
+                            onClick = {
+                                savedName = sharedPref.getString("username", "Not Found") ?: ""
+                                savedClass = sharedPref.getString("userclass", "Not Found") ?: ""
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("GET (Fetch Values)")
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+
+                        Greeting(
+                            name = "Name: $savedName | Class: $savedClass",
+                            modifier = Modifier
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello, $name",
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    Practical11Theme {
+        Greeting("Android")
+    }
+}
+
+
+XML
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shared Preferences Demo"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:paddingBottom="20dp" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Name" />
+
+    <EditText
+        android:id="@+id/etClass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Class"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:id="@+id/btnSet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SET (Save Values)"
+        android:layout_marginTop="18dp" />
+
+    <Button
+        android:id="@+id/btnGet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GET (Fetch Values)"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result Will Appear Here"
+        android:textSize="18sp"
+        android:layout_marginTop="25dp" />
+
+</LinearLayout>
