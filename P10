@@ -1,0 +1,227 @@
+Aim: Write an android application demonstrating response to event/user interaction for a. checkbox b. Radio button c. Button d. Spinner.
+
+main kt
+
+package com.example.atoofa
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.atoofa.ui.theme.AtoofaTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            AtoofaTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    MainScreen(modifier = Modifier.padding(innerPadding))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MainScreen(modifier: Modifier = Modifier) {
+
+    // ---------- STATES ----------
+    var selectedSubject by remember { mutableStateOf("Data Structures") }
+    var expanded by remember { mutableStateOf(false) }
+
+    var selectedGender by remember { mutableStateOf("None") }
+    var buttonMessage by remember { mutableStateOf("") }
+
+    var accepted by remember { mutableStateOf(false) }
+    // -----------------------------
+
+    val subjects = listOf("Data Structures", "Operating Systems", "Networking", "DBMS")
+
+    Column(modifier.padding(20.dp)) {
+
+        // ========== SPINNER ==========
+        Text("Select Subject:")
+
+        Box {
+            OutlinedButton(onClick = { expanded = true }) {
+                Text(selectedSubject)
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                subjects.forEach { subject ->
+                    DropdownMenuItem(
+                        text = { Text(subject) },
+                        onClick = {
+                            selectedSubject = subject
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
+
+        Text("Selected Subject: $selectedSubject")
+        Spacer(modifier = Modifier.height(20.dp))
+
+
+        // ========== RADIO BUTTONS ==========
+        Text("Select Gender:")
+
+        Row {
+            RadioButton(
+                selected = selectedGender == "Male",
+                onClick = { selectedGender = "Male" }
+            )
+            Text("Male")
+
+            Spacer(Modifier.width(20.dp))
+
+            RadioButton(
+                selected = selectedGender == "Female",
+                onClick = { selectedGender = "Female" }
+            )
+            Text("Female")
+        }
+
+        Text("Selected: $selectedGender")
+        Spacer(modifier = Modifier.height(20.dp))
+
+
+        // ========== BUTTON ==========
+        Button(onClick = { buttonMessage = "Hello SYCS" }) {
+            Text("Click Me")
+        }
+        Text(buttonMessage)
+        Spacer(modifier = Modifier.height(20.dp))
+
+
+        // ========== CHECKBOX (LAST) ==========
+        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+            Checkbox(
+                checked = accepted,
+                onCheckedChange = { accepted = it }
+            )
+            Text("Accept Terms & Conditions")
+        }
+
+        Text(
+            text = if (accepted) "Conditions Accepted" else "Conditions Accepted: false"
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewUI() {
+    AtoofaTheme {
+        MainScreen()
+    }
+}
+
+
+XML
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- SPINNER -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Subject:"
+        android:layout_marginTop="10dp" />
+
+    <Spinner
+        android:id="@+id/spinnerSubject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/spinnerResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selected Subject:"
+        android:paddingTop="5dp" />
+
+
+    <!-- RADIO BUTTONS -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Gender:"
+        android:paddingTop="20dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/radioFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/radioResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selected: None"
+        android:paddingTop="5dp" />
+
+
+    <!-- BUTTON -->
+    <Button
+        android:id="@+id/myButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click Me"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/buttonResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:paddingTop="5dp" />
+
+
+    <!-- CHECKBOX (TERMS & CONDITIONS) LAST -->
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accept Terms and Conditions"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/checkResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Conditions Accepted: false"
+        android:paddingTop="5dp" />
+
+</LinearLayout>
