@@ -1,0 +1,54 @@
+Aim: Write a program using Kotlin to implement mutable and immutable collections.
+
+fun main() {
+    // -------- Immutable Array --------
+    println(“Immutable Array Example”)
+    val numbers = arrayOf(1, 2, 3, 4, 5)
+    for (num in numbers) {
+        println(num)
+    }
+    println(“First element: ${numbers[0]}”)
+    println(“Array size: ${numbers.size}”)
+    // Sorting Array
+    val nums = arrayOf(5, 3, 1, 4, 2)
+    nums.sort()
+    println(“Sorted array: ${nums.joinToString()}”)
+    // -------- Immutable List --------
+    println(“\nImmutable List Example”)
+    val fruits = listOf(“Apple”, “Banana”, “Cherry”)
+    println(“First fruit: ${fruits[0]}”)
+    println(“List size: ${fruits.size}”)
+    for (fruit in fruits) {
+        Println(fruit)
+    }
+    // -------- Immutable Set --------
+    println(“\nImmutable Set Example”)
+    val set1 = setOf(1, 2, 3)
+    val set2 = setOf(3, 4, 5)
+    println(“Union: ${set1.union(set2)}”)
+    println(“Intersection: ${set1.intersect(set2)}”)
+    // -------- Mutable List --------
+    println(“\nMutable List Example”)
+    val fruitList = mutableListOf(“Apple”, “Banana”)
+    fruitList.add(“Orange”)
+    fruitList.remove(“Banana”)
+    println(fruitList)
+    // -------- Mutable Set --------
+    println(“\nMutable Set Example”)
+    val names = mutableSetOf(“Alice”, “Bob”)
+    names.add(“Charlie”)
+    names.remove(“Alice”)
+    println(names)
+    // -------- Mutable Map --------
+    println(“\nMutable Map Example”)
+    val ageMap = mutableMapOf(
+        “Alice” to 20,
+        “Bob” to 25
+    )
+    ageMap[“Charlie”] = 30
+    println(“Original Map: $ageMap”)
+    ageMap.remove(“Alice”)
+    ageMap[“Bob”] = 26
+    println(“Updated Map: $ageMap”)
+}
+
