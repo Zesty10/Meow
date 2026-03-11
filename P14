@@ -1,0 +1,142 @@
+Aim: Create an Android application that add two numbers on click of a button.
+
+main.kt
+
+package com.example.practical14
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.practical14.ui.theme.Practical14Theme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            Practical14Theme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    AddNumbersScreen(modifier = Modifier.padding(innerPadding))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AddNumbersScreen(modifier: Modifier = Modifier) {
+    // State variables for input and result
+    var number1 by remember { mutableStateOf("") }
+    var number2 by remember { mutableStateOf("") }
+    var result by remember { mutableStateOf<Double?>(null) }
+
+    // Column for layout
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // First input
+        OutlinedTextField(
+            value = number1,
+            onValueChange = { number1 = it },
+            label = { Text("Enter first number") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Second input
+        OutlinedTextField(
+            value = number2,
+            onValueChange = { number2 = it },
+            label = { Text("Enter second number") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Button
+        Button(
+            onClick = {
+                result = try {
+                    val n1 = number1.toDouble()
+                    val n2 = number2.toDouble()
+                    n1 + n2
+                } catch (e: NumberFormatException) {
+                    null
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Add Numbers")
+        }
+
+        // Result text
+        Text(
+            text = result?.let { "Result: $it" } ?: "Result will appear here",
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AddNumbersScreenPreview() {
+    Practical14Theme {
+        AddNumbersScreen()
+    }
+}
+
+
+Layout file(XML)
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- First Number -->
+    <EditText
+        android:id="@+id/etNumber1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter first number"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Second Number -->
+    <EditText
+        android:id="@+id/etNumber2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter second number"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Add Button -->
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Numbers"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Result Text -->
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Result will appear here"
+        android:textSize="18sp"/>
+</LinearLayout>
+
