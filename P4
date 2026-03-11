@@ -1,0 +1,38 @@
+Aim:Write a program using Kotlin to implement delegation and extension function.
+
+interface delegation
+{
+    fun mymessage()
+    fun mymessageline()
+}
+
+class delegationimplementation(val y: String) : delegation
+{
+    override fun mymessage()
+    {
+        print(y)
+    }
+    override fun mymessageline()
+    {
+        println(y)
+    }
+}
+
+class Newfeature(m: delegation) : delegation by m
+{
+    override fun mymessage()
+    {
+        print("Android with Kotlin Programming")
+    }
+}
+
+// Main function
+fun main()
+{
+    val b = delegationimplementation("\nWelcome, SYCS!")
+
+    Newfeature(b).mymessage()
+    Newfeature(b).mymessageline()
+
+
+}
