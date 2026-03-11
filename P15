@@ -1,0 +1,111 @@
+Aim: Create media player Application in android that plays audio. Implement play ,Pause, Loop features.
+
+main.kt
+
+package com.example.practical15
+
+import android.media.MediaPlayer
+import android.os.Bundle
+import android.widget.Button
+import androidx.activity.ComponentActivity
+import com.example.practical15.R
+
+class MainActivity : ComponentActivity() {
+
+    private lateinit var mediaPlayer: MediaPlayer
+    private var isLooping = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.layout)
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.music)
+
+        val btnPlay = findViewById<Button>(R.id.btnPlay)
+        val btnPause = findViewById<Button>(R.id.btnPause)
+        val btnLoop = findViewById<Button>(R.id.btnLoop)
+
+        btnPlay.setOnClickListener {
+            if (!mediaPlayer.isPlaying) {
+                mediaPlayer.start()
+            }
+        }
+
+        btnPause.setOnClickListener {
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+            }
+        }
+
+        btnLoop.setOnClickListener {
+            isLooping = !isLooping
+            mediaPlayer.isLooping = isLooping
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+    }
+}
+
+
+Layout file(XML)
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <Button
+        android:id="@+id/btnPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play" />
+
+    <Button
+        android:id="@+id/btnPause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pause"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnLoop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loop"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
+
+
+Steps for the Practical
+
+Steps to add music.mp3 file
+1.	Go to Project → app → src → main → res
+2.	Right-click on res
+3.	Click New → Android Resource Directory
+4.	Set: Resource type: raw
+5.	Click OK
+6.	Now copy the music file and paste it in the raw.
+Install APK Using USB Cable (Android Studio)
+ Step 1: Enable Developer Options
+1.	Open Settings → About phone
+2.	Tap Build number 7 times
+3.	You’ll see: “You are now a developer”
+ Step 2: Enable USB Debugging
+1.	Go to Settings → Developer options
+2.	Turn ON USB debugging
+3.	Tap OK when prompted
+ Step 3: Connect Phone to PC
+•	Use a USB cable
+•	Select File Transfer (MTP) on phone if asked
+Step 4: Install APK from Android Studio
+1.	Open your project in Android Studio
+2.	Click Run 
+3.	Select your connected device
+4.	APK will be installed automatically on your phone
