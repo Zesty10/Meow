@@ -1,0 +1,307 @@
+Aim: Write an android application to design screens using different layouts and UI including Button, EditText, Textview, Radio Button etc.
+package com.example.fatima
+
+main kt
+
+package com.example.fatima
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.fatima.ui.theme.FatimaTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            FatimaTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    AppForm(
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AppForm(modifier: Modifier = Modifier) {
+
+    // State variables
+    var name by remember { mutableStateOf("") }
+    var gender by remember { mutableStateOf("") }
+    var python by remember { mutableStateOf(false) }
+    var kotlin by remember { mutableStateOf(false) }
+    var selectedClass by remember { mutableStateOf("FYCS") }
+    var welcomeMessage by remember { mutableStateOf("") }
+    var languageMessage by remember { mutableStateOf("") }
+
+    val classList = listOf("FYCS", "SYCS", "TYCS")
+
+    Column(modifier = modifier.padding(20.dp)) {
+
+        // NAME
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Name") }
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // GENDER
+        Text(text = "Gender")
+        Row {
+            RadioButton(
+                selected = (gender == "Male"),
+                onClick = { gender = "Male" }
+            )
+            Text("Male")
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+            RadioButton(
+                selected = (gender == "Female"),
+                onClick = { gender = "Female" }
+            )
+            Text("Female")
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // CHECKBOX LANGUAGE
+        Text(text = "I Like")
+        Row {
+            Checkbox(checked = python, onCheckedChange = { python = it })
+            Text("Python")
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+            Checkbox(checked = kotlin, onCheckedChange = { kotlin = it })
+            Text("Kotlin")
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // CLASS DROPDOWN
+        var expanded by remember { mutableStateOf(false) }
+
+        Box {
+            Button(onClick = { expanded = true }) {
+                Text("Your Class: $selectedClass")
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                classList.forEach { cls ->
+                    DropdownMenuItem(
+                        text = { Text(cls) },
+                        onClick = {
+                            selectedClass = cls
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // SUBMIT BUTTON
+        Button(onClick = {
+            welcomeMessage = "Welcome $name"
+
+            languageMessage = when {
+                python && kotlin -> "You love both languages"
+                python -> "You love Python"
+                kotlin -> "You love Kotlin"
+                else -> "You don't like these languages"
+            }
+
+        }) {
+            Text("Submit")
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(text = welcomeMessage)
+        Text(text = "Gender: $gender")
+        Text(text = "Class: $selectedClass")
+        Text(text = languageMessage)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    FatimaTheme {
+        AppForm()
+    }
+}
+
+
+
+XML
+
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- NAME -->
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:inputType="textPersonName" />
+
+        <!-- SPACING -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <!-- GENDER LABEL -->
+        <TextView
+            android:id="@+id/gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gender"
+            android:textSize="18sp" />
+
+        <!-- RADIO GROUP -->
+        <RadioGroup
+            android:id="@+id/selectgender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Male" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Female"
+                android:layout_marginStart="24dp" />
+        </RadioGroup>
+
+        <!-- SPACING -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <!-- I LIKE LABEL -->
+        <TextView
+            android:id="@+id/lang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I Like"
+            android:textSize="18sp" />
+
+        <!-- CHECKBOXES ROW -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <CheckBox
+                android:id="@+id/checkBox1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Python" />
+
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kotlin"
+                android:layout_marginStart="24dp" />
+        </LinearLayout>
+
+        <!-- SPACING -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <!-- CLASS LABEL -->
+        <TextView
+            android:id="@+id/course"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Class"
+            android:textSize="18sp" />
+
+        <!-- SPINNER -->
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <!-- SPACING -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <!-- SELECTED CLASS OUTPUT -->
+        <TextView
+            android:id="@+id/myclass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold" />
+
+        <!-- SPACING -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <!-- RESPONSE TEXT -->
+        <TextView
+            android:id="@+id/textViewResponse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|italic"
+            android:textSize="16sp" />
+
+        <!-- LANGUAGE RESPONSE -->
+        <TextView
+            android:id="@+id/language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp" />
+
+        <!-- SUBMIT BUTTON -->
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:layout_marginTop="20dp" />
+
+    </LinearLayout>
+</ScrollView>
