@@ -28,12 +28,18 @@ fun main() {
     obj.show()          // Can be accessed
 }
 
-3. Internal Modifier
+C]Internal Modifier
 internal class A {
     internal val number = 100
+
     internal fun display() {
         println("Number is: $number")
     }
+}
+
+fun main() {
+    val obj = A()
+    obj.display()
 }
 
 
