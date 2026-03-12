@@ -36,3 +36,42 @@ fun main()
 
 
 }
+
+
+fun operation(a: Int, b: Int, operation: (Int, Int) -> Int): Int {
+        return operation(a, b)
+    }
+
+    fun sum(a: Int, b: Int): Int = a + b
+    fun multiply(a: Int, b: Int): Int = a * b
+
+    fun main() {
+        val addFunction: (Int, Int) -> Int = ::sum
+        val multiplyFunction: (Int, Int) -> Int = ::multiply
+print("Addition of nos is:")
+        println(operation(10, 5,addFunction))
+        print("Multiply nos is:")
+        println(operation(10, 5, multiplyFunction))
+    }
+
+
+
+
+
+//EXTENSIVE FUNCTION
+class Circle(val radius: Double) {
+    fun area(): Double {
+        return Math.PI * radius * radius
+    }
+}
+
+// Extension function
+fun Circle.perimeter(): Double {
+    return 2 * Math.PI * radius
+}
+
+fun main() {
+    val circle = Circle(2.5)
+    println("Area of the circle is ${circle.area()}")
+    println("Perimeter of the circle is ${circle.perimeter()}")
+}
